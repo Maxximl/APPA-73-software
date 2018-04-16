@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/actions">
+        <file>images/actions_edit_clear_15784.png (clear)</file>
+        <file>images/closingsession_theoutputnear_cierredesesion_10028.png (exit)</file>
+        <file>images/connect_1217.png (connect)</file>
+        <file>images/Settings_30027.png (settings)</file>
+        <file>images/usbcable_78354.png (disconnect)</file>
+    </qresource>
+</RCC>

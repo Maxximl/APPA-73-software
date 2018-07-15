@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "console.h"
 #include <QSerialPort>
 #include <QtWidgets>
 #include <SettingDialog/settingdialog.h>
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),mSettingDialog(new SettingDialog(this))
@@ -12,24 +14,19 @@ MainWindow::MainWindow(QWidget *parent) :
        QVBoxLayout *rBox = new QVBoxLayout;
        QHBoxLayout *hBox = new QHBoxLayout;
        QHBoxLayout *lcdBox = new QHBoxLayout;
+       console = new Console;
+       lcdValue = new QString;
        mode = new QLabel("Режим: ");
        modeValue = new QLabel;
        number0 = new QLCDNumber;
-       number1 = new QLCDNumber;
-       number2 = new QLCDNumber;
-       number3 = new QLCDNumber;
+
        number0->setStyleSheet("background : lightgreen; color : black;");
-       number1->setStyleSheet("background : lightgreen; color : black;");
-       number2->setStyleSheet("background : lightgreen; color : black;");
-       number3->setStyleSheet("background : lightgreen; color : black;");
+
        number0->setSegmentStyle(QLCDNumber::Flat);
-       number1->setSegmentStyle(QLCDNumber::Flat);
-       number2->setSegmentStyle(QLCDNumber::Flat);
-       number3->setSegmentStyle(QLCDNumber::Flat);
+
+       number0->setFixedSize(100,50);
        value = new QLabel("Значение: ");
-       lcdBox->addWidget(number3);
-       lcdBox->addWidget(number2);
-       lcdBox->addWidget(number1);
+
        lcdBox->addWidget(number0);
        lBox->addWidget(mode);
        rBox->addWidget(modeValue);
@@ -42,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-       console = new QPlainTextEdit;
+
 
        sport = new QSerialPort;
        QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -72,6 +69,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setCOM()
 {   SettingDialog::Settings setting = mSettingDialog->settings();
+
     sport->setPortName(setting.name);
     sport->setBaudRate(setting.baudRate);
 
@@ -97,6 +95,7 @@ void MainWindow::readData()
     console->insertPlainText(data);
     QScrollBar *sb = console->verticalScrollBar();
     sb->setValue(sb->maximum());
+    lcdValue->clear();
     switch(data[5])
     {
     case 59: modeValue->setText("Voltage");
@@ -131,102 +130,146 @@ void MainWindow::readData()
     default: modeValue->setText("None");
     }
 
-    switch(data[4])
-    {
-    case 48: number0->display(0);
-        break;
-    case 49: number0->display(1);
-        break;
-    case 50: number0->display(2);
-        break;
-    case 51: number0->display(3);
-        break;
-    case 52: number0->display(4);
-        break;
-    case 53: number0->display(5);
-        break;
-    case 54: number0->display(6);
-        break;
-    case 55: number0->display(7);
-        break;
-    case 56: number0->display(8);
-        break;
-    case 57: number0->display(9);
-        break;
 
-    }
-    switch(data[3])
-    {
-    case 48: number1->display(0);
-        break;
-    case 49: number1->display(1);
-        break;
-    case 50: number1->display(2);
-        break;
-    case 51: number1->display(3);
-        break;
-    case 52: number1->display(4);
-        break;
-    case 53: number1->display(5);
-        break;
-    case 54: number1->display(6);
-        break;
-    case 55: number1->display(7);
-        break;
-    case 56: number1->display(8);
-        break;
-    case 57: number1->display(9);
-        break;
-
-    }
-    switch(data[2])
-    {
-    case 48: number2->display(0);
-        break;
-    case 49: number2->display(1);
-        break;
-    case 50: number2->display(2);
-        break;
-    case 51: number2->display(3);
-        break;
-    case 52: number2->display(4);
-        break;
-    case 53: number2->display(5);
-        break;
-    case 54: number2->display(6);
-        break;
-    case 55: number2->display(7);
-        break;
-    case 56: number2->display(8);
-        break;
-    case 57: number2->display(9);
-        break;
-
-    }
     switch(data[1])
     {
-    case 48: number3->display(0);
+//    case 48: lcdValue->append("0");
+//        break;
+    case 49: lcdValue->append("1");
         break;
-    case 49: number3->display(1);
+    case 50: lcdValue->append("2");
         break;
-    case 50: number3->display(2);
+    case 51: lcdValue->append("3");
         break;
-    case 51: number3->display(3);
+    case 52: lcdValue->append("4");
         break;
-    case 52: number3->display(4);
+    case 53: lcdValue->append("5");
         break;
-    case 53: number3->display(5);
+    case 54: lcdValue->append("6");
         break;
-    case 54: number3->display(6);
+    case 55: lcdValue->append("7");
         break;
-    case 55: number3->display(7);
+    case 56: lcdValue->append("8");
         break;
-    case 56: number3->display(8);
-        break;
-    case 57: number3->display(9);
+    case 57: lcdValue->append("9");
         break;
 
     }
+
+    switch(data[2])
+    {
+    case 48: lcdValue->append("0");
+        break;
+    case 49: lcdValue->append("1");
+        break;
+    case 50: lcdValue->append("2");
+        break;
+    case 51: lcdValue->append("3");
+        break;
+    case 52: lcdValue->append("4");
+        break;
+    case 53: lcdValue->append("5");
+        break;
+    case 54: lcdValue->append("6");
+        break;
+    case 55: lcdValue->append("7");
+        break;
+    case 56: lcdValue->append("8");
+        break;
+    case 57: lcdValue->append("9");
+        break;
+
+
+    }
+
+    switch(data[3])
+    {
+    case 48: lcdValue->append("0");
+        break;
+    case 49: lcdValue->append("1");
+        break;
+    case 50: lcdValue->append("2");
+        break;
+    case 51: lcdValue->append("3");
+        break;
+    case 52: lcdValue->append("4");
+        break;
+    case 53: lcdValue->append("5");
+        break;
+    case 54: lcdValue->append("6");
+        break;
+    case 55: lcdValue->append("7");
+        break;
+    case 56: lcdValue->append("8");
+        break;
+    case 57: lcdValue->append("9");
+        break;
+
+
+    }
+
+    switch(data[4])
+    {
+    case 48: lcdValue->append("0");
+        break;
+    case 49: lcdValue->append("1");
+        break;
+    case 50: lcdValue->append("2");
+        break;
+    case 51: lcdValue->append("3");
+        break;
+    case 52: lcdValue->append("4");
+        break;
+    case 53: lcdValue->append("5");
+        break;
+    case 54: lcdValue->append("6");
+        break;
+    case 55: lcdValue->append("7");
+        break;
+    case 56: lcdValue->append("8");
+        break;
+    case 57: lcdValue->append("9");
+        break;
+
+
+    }
+   double lcdVal = lcdValue->toDouble();
+   *lcdValue = QString::number(lcdVal);
+   switch(data[0])
+   {
+   case 48: if(lcdVal<=9)
+       {
+           lcdValue->prepend("0.00");
+             qDebug()<<lcdVal;
+       }
+       else if((10<lcdVal)&&(lcdVal<100))
+       {
+           lcdValue->prepend("0.0");
+             qDebug()<<lcdVal;
+       }
+       else
+       {
+           lcdValue->prepend("0.");
+           qDebug()<<lcdVal;
+       }
+       break;
+   case 50:
+       lcdValue->resize(5);
+       *(lcdValue+2) = ".";
+       break;
+   case 52:
+       break;
+
+   }
+   if(*lcdValue == "6000")
+   {
+       number0->display("OL");
+   }
+   else
+   {
+   number0->display(lcdValue->toDouble());
+   }
+
 }
 
 void MainWindow::closeCOM()

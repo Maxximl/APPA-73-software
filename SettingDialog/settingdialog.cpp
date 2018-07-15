@@ -14,10 +14,14 @@ SettingDialog::~SettingDialog()
     delete ui;
 }
 
-SettingDialog::Settings SettingDialog::settings()
+SettingDialog::Settings SettingDialog::settings() //возвращаем структуру Settings
 {
     Settings setting;
     setting.name = ui->comboBox->currentText();
+//    switch (ui->comboBox_2->currentText())
+//    {
+
+//    }
     if(ui->comboBox_2->currentText()=="19200")
     setting.baudRate = QSerialPort::Baud19200;
     setting.flowControl = QSerialPort::NoFlowControl;

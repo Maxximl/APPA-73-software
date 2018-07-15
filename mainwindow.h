@@ -5,6 +5,7 @@
 #include <QtWidgets>
 class QSerialPort;
 class SettingDialog;
+class Console;
 namespace Ui {
 class MainWindow;
 }
@@ -20,7 +21,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QPushButton *btnCOM;
-    QPlainTextEdit *console;
+
     QSerialPort *sport;
 
     SettingDialog *mSettingDialog;
@@ -28,11 +29,10 @@ private:
     QLabel *mode;
     QLabel *modeValue;
     QLabel *value;
-    QLCDNumber *number3;
-    QLCDNumber *number2;
-    QLCDNumber *number1;
-    QLCDNumber *number0;
 
+    QLCDNumber *number0;
+    Console    *console;
+    QString    *lcdValue;
 private slots:
     void setCOM();
     void readData();
